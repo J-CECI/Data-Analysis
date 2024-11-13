@@ -1,18 +1,18 @@
 
- ### ÁíÜëõóç äåäïìÝíùí 
- ### Åñãáóßá 5: ¸ñåõíá ãéá ôïõò ðïëßôåò ôïõ Illinois 
- ### ÉùÜííá ÔóÝôóé / Á.Ì.:s6160095
+ ### 
+ ### 
+ ### 
 
 
 
 ## --------------------------------------------------------------------------------------------------------
-## 2
+## 2 Chapter: Descriptive analysis.
 ## --------------------------------------------------------------------------------------------------------
 
 ## Import data in the R
 
 library(foreign)
-data<-read.spss("C:/Users/FamiliaCeci/Desktop/05_ilinois_state_lfs.sav",to.data.frame=T)
+data<-read.spss("C:/Users/Ceci/Desktop/05_ilinois_state_lfs.sav",to.data.frame=T)
 
 
 ## 
@@ -23,31 +23,30 @@ g<-function(x) sum(is.na(x))
 sapply(data,g)
 
 
-## convert 
+##  convert the variables wealth, age and edu in numerical
 data$age<-as.numeric(data$age)
 data$wealth<-as.numeric(data$wealth)
 data$educ<-as.numeric(data$educ)
 
 
-## 
-
+## descriptive statistics for the numeric variables 
 library(sjmisc)
 descr(data[,c(3,4,7)])
 
-## 
-
+## function for kurtosis
 kurtosis<-function(x) { 
   n<-length(x) 
   s<-sqrt(var(x)*(n-1)/n)
   mean((x-mean(x))^4)/s^4 -3 }
 
-## 
-
+## apply the kurtosis function for the numeric variables with out the NA 
 kurtosis(na.omit(data[,3]))
 kurtosis(na.omit(data[,4]))
 kurtosis(na.omit(data[,7]))
 
-## 
+##  table():creates a frequency table of the variable 
+##  prop.table(table()) :function computes the proportions for each category based on the total number of observations
+## for the categorical variables in the dataset
 
 round(cbind(table(data$marital),prop.table(table(data$marital))),3)
 round(cbind(table(data$sex),prop.table(table(data$sex))),3)
@@ -55,7 +54,6 @@ round(cbind(table(data$health),prop.table(table(data$health))),3)
 round(cbind(table(data$zodiac),prop.table(table(data$zodiac))),3)
 
 ## 
-
 par(mfrow=c(1,3))
 
 d<-density(na.omit(data$age))
@@ -64,96 +62,112 @@ polygon(d,col="blue", border=0)
 
 ## 
 plot(table(na.omit(data$educ)),main="Dice distribution of Education",ylab="Probability",col="blue")
-
 plot(table(na.omit(data$wealth)),main="Dice distribution of Wealth",ylab="Probability",col="blue")
 
 
 
 
-## 
+## normality for the age variable without the NA
+## first with the Normal Q-Q plot (Quantile-Quantile plot)
 qqnorm(na.omit(data$age),main="Normal QQ-Plot of Age")
 qqline(na.omit(data$age),col=2)
-
+# additional check the normality for the variable age  using the shapiro test 
 shapiro.test(data$age)
  
 
+## we are doing the same for the variables educ and wealth 
 
-
-## 
+## for educ
 qqnorm(na.omit(data$educ),main="Normal QQ-Plot of Educ")
 qqline(na.omit(data$educ),col=2)
 shapiro.test(data$educ)
 
-## 
-## 
+## for wealth 
+
 qqnorm(na.omit(data$wealth),main="Normal QQ-Plot of Wealth")
 qqline(na.omit(data$wealth),col=2)
 shapiro.test(data$wealth)
 
+## Pie chart for the Marital 
 perc <- round(100*prop.table(table(data$marital)),1)
 perc <- paste( '(', perc, sep='' )
 perc <- paste( perc, '%)', sep='' )
 pielabels <- paste( levels(data$marital), perc)
 pie(table(data$marital), labels=pielabels, border=1,col=colors()[429:433],main=c("Pie chart for Marial"))
 
+## Pie chart for the variable zodiac 
 perc <- round(100*prop.table(table(data$zodiac)),1)
 perc <- paste( '(', perc, sep='' )
 perc <- paste( perc, '%)', sep='' )
 pielabels <- paste( levels(data$zodiac), perc)
 pie(table(data$zodiac), labels=pielabels, border=1,col=colors()[1:12],main=c("Pie chart for Zodiac"))
 
+## Pie chart for the variable sex
 pie(table(data$sex),col=colors()[c(520,525)],main="Pie chart for Sex")
 
-
+## Barplot for the variable Health 
 barplot(table(data$health),col="lightblue",main="Barplot for Health")
 
 
 ## ------------------------------------------------------------------------------------------------------------------------------------
-## 3.
+## 3 Chapter 
 ## -------------------------------------------------------------------------------------------------------------------------------------
 
 
+## scatterplot matrix for selected columns in the dataset
 pairs(data[,c(3,4,7)], panel=panel.smooth, upper.panel = NULL)
 
+
+## correlation matrix for selected columns in the dataset
 M<-((data[,c(3,4,7)]))
-
-
 cor(M, use= 'pairwise.complete.obs',method = "kendal")
-
 corrplot(cor(M, use= 'pairwise.complete.obs',method = "kendal"),method ="color",type="lower")
 
 
 
 par(mrow=c(2,2))
 
-## Boxplot  age
+## Boxplot for the variable   age
+## install the  the car package
 library(car)
 
 par(mfrow=c(1,2))
+## compares the distribution of age across marital
 Boxplot(age~marital, data=data, id=list(n=Inf),col=colors()[429:433],main="AGE~MARITAL",ylab = "AGE",xlab="MARITAL",cex.main=2)
+## compares the distribution of age across sex
 Boxplot(age~sex, data=data, id=list(n=Inf),col=c("blue","red"),main="AGE~SEX",ylab="AGE",xlab = "SEX",cex.main=2)
 
 par(mfrow=c(1,2))
+## compares the distribution of age across health
 Boxplot(age~health, data=data, id=list(n=Inf),col="lightblue",main="AGE~HEALTH",ylab="AGE",xlab = "HEALTH",cex.main=2)
+## compares the distribution of age across marital
 Boxplot(age~zodiac, data=data, id=list(n=Inf),col=colors()[1:12],main="AGE~ZODIAC",ylab="AGE",xlab = "ZODIAC",cex.main=2)
 
 ## Boxplot educ
 par(mfrow=c(1,2))
+## compares the distribution of educ across marital
 Boxplot(educ~marital, data=data, id=list(n=Inf),col=colors()[429:433],main="EDUC~MARITAL",ylab = "EDUC",xlab = "MARITAL",cex.main=2)
+## compares the distribution of educ across sex
 Boxplot(educ~sex, data=data, id=list(n=Inf),col=c("blue","red"),main="EDUC~SEX",ylab = "EDUC",xlab = "SEX",cex.main=2)
 
 par(mfrow=c(1,2))
+## compares the distribution of educ across health
 Boxplot(educ~health, data=data, id=list(n=Inf),col="lightblue",main="EDUC~HEALTHL",ylab = "EDUC",xlab = "HEALTH",cex.main=2)
+## compares the distribution of educ across zodiac
 Boxplot(educ~zodiac, data=data, id=list(n=Inf),col=colors()[1:12],main="EDUC~ZODIAC",ylab = "EDUC",xlab = "ZODIAC",cex.main=2)
 
 
 ## Boxplot wealth
 par(mfrow=c(1,2))
+## compares the distribution of wealth across marital
 Boxplot(wealth~marital, data=data, id=list(n=Inf),col=colors()[429:433],main="WEALTH~MARITAL",ylab= "WEALTH",xlab= "MARITAL",cex.main=2)
+## compares the distribution of wealth across sex
 Boxplot(wealth~sex, data=data, id=list(n=Inf),col=c("blue","red"),main="WEALTH~SEX",ylab= "WEALTH",xlab= "SEX",cex.main=2)
 
 par(mfrow=c(1,2))
+## compares the distribution of wealth across health
 Boxplot(wealth~health, data=data, id=list(n=Inf),col="lightblue",main="WEALTH~HEALTH",ylab= "WEALTH",xlab= "HEALTH",cex.main=2)
+## compares the distribution of wealth across zodiac
 Boxplot(wealth~zodiac, data=data, id=list(n=Inf),col=colors()[1:12],main="WEALTH~ZODIAC",ylab= "WEALTH",xlab= "ZODIAC",cex.main=2)
 
 
