@@ -1,5 +1,5 @@
 
- ### 
+ ### Code 
  ### 
  ### 
 
@@ -46,7 +46,7 @@ kurtosis(na.omit(data[,7]))
 
 ##  table():creates a frequency table of the variable 
 ##  prop.table(table()) :function computes the proportions for each category based on the total number of observations
-## for the categorical variables in the dataset
+##  for the categorical variables in the dataset
 
 round(cbind(table(data$marital),prop.table(table(data$marital))),3)
 round(cbind(table(data$sex),prop.table(table(data$sex))),3)
@@ -110,7 +110,7 @@ barplot(table(data$health),col="lightblue",main="Barplot for Health")
 
 
 ## ------------------------------------------------------------------------------------------------------------------------------------
-## 3 Chapter 
+## 3 Chapter : independence to evaluate whether there is a significant association between two variables
 ## -------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -134,7 +134,7 @@ library(car)
 par(mfrow=c(1,2))
 ## compares the distribution of age across marital
 Boxplot(age~marital, data=data, id=list(n=Inf),col=colors()[429:433],main="AGE~MARITAL",ylab = "AGE",xlab="MARITAL",cex.main=2)
-## compares the distribution of age across sex
+## compares the distribution of age across sex  (gender) 
 Boxplot(age~sex, data=data, id=list(n=Inf),col=c("blue","red"),main="AGE~SEX",ylab="AGE",xlab = "SEX",cex.main=2)
 
 par(mfrow=c(1,2))
@@ -147,7 +147,7 @@ Boxplot(age~zodiac, data=data, id=list(n=Inf),col=colors()[1:12],main="AGE~ZODIA
 par(mfrow=c(1,2))
 ## compares the distribution of educ across marital
 Boxplot(educ~marital, data=data, id=list(n=Inf),col=colors()[429:433],main="EDUC~MARITAL",ylab = "EDUC",xlab = "MARITAL",cex.main=2)
-## compares the distribution of educ across sex
+## compares the distribution of educ across sex  (gender) 
 Boxplot(educ~sex, data=data, id=list(n=Inf),col=c("blue","red"),main="EDUC~SEX",ylab = "EDUC",xlab = "SEX",cex.main=2)
 
 par(mfrow=c(1,2))
@@ -161,7 +161,7 @@ Boxplot(educ~zodiac, data=data, id=list(n=Inf),col=colors()[1:12],main="EDUC~ZOD
 par(mfrow=c(1,2))
 ## compares the distribution of wealth across marital
 Boxplot(wealth~marital, data=data, id=list(n=Inf),col=colors()[429:433],main="WEALTH~MARITAL",ylab= "WEALTH",xlab= "MARITAL",cex.main=2)
-## compares the distribution of wealth across sex
+## compares the distribution of wealth across sex (gender) 
 Boxplot(wealth~sex, data=data, id=list(n=Inf),col=c("blue","red"),main="WEALTH~SEX",ylab= "WEALTH",xlab= "SEX",cex.main=2)
 
 par(mfrow=c(1,2))
@@ -170,8 +170,8 @@ Boxplot(wealth~health, data=data, id=list(n=Inf),col="lightblue",main="WEALTH~HE
 ## compares the distribution of wealth across zodiac
 Boxplot(wealth~zodiac, data=data, id=list(n=Inf),col=colors()[1:12],main="WEALTH~ZODIAC",ylab= "WEALTH",xlab= "ZODIAC",cex.main=2)
 
-
-## marital ~ sex
+##  Chi-Square test of independence to evaluate whether there
+## is a significant association between marital status and sex (gender) in a dataset.
 
 tab1<-xtabs(~marital+sex,data=(data))
 chisq.test(tab1, correct=FALSE, simulate.p.value = TRUE)
@@ -179,7 +179,9 @@ chisq.test(tab1, correct=FALSE, simulate.p.value = TRUE)
 barplot(tab1,beside=T,col=colors()[21:25],ylim=c(0,300),main="marital~sex")
 legend("topleft",col=colors()[21:25],lwd=2,legend=levels(data$marital))
 
-## marital ~health
+
+##  Chi-Square test of independence to evaluate whether there
+## is a significant association between marital status and health in a dataset.
 
 tab2<-xtabs(~marital+health,data=(data))
 chisq.test(tab2, correct=FALSE, simulate.p.value = TRUE)
@@ -187,23 +189,25 @@ chisq.test(tab2, correct=FALSE, simulate.p.value = TRUE)
 barplot(tab2,beside=T,col=colors()[540:544],ylim=c(0,200),main="Marital~Health",cex.main=2)
 legend("topright",col=colors()[540:544],lwd=2,legend=levels(data$marital))
 
-## marital ~ zodiac
 
+##  Chi-Square test of independence to evaluate whether there
+## is a significant association between marital status and zodiac in a dataset.
 tab3<-xtabs(~marital+zodiac,data=(data))
 chisq.test(tab3, correct=FALSE, simulate.p.value = TRUE)
 
 barplot(tab3,beside=T,col=colors()[21:25],main ="Marital~Zodiac",las=3,ylim=c(0,60))
 legend("topright",legend=c(levels(data$marital)),col=colors()[21:25],lwd=3)
 
-## sex ~ health
-
+##  Chi-Square test of independence to evaluate whether there
+## is a significant association between sex (gender) and health in a dataset.
 tab4<-xtabs(~sex+health,data=(data))
 chisq.test(tab4, correct=FALSE, simulate.p.value = TRUE)
 
 barplot(tab4,beside=T,col=colors()[461:462],ylim=c(0,300),main="SexHealth")
 legend("topright",legend=c(levels(data$health)),col=colors()[461:462],lwd=3)
 
-## sex ~ zodiac
+##  Chi-Square test of independence to evaluate whether there
+## is a significant association between sex (gender) and zodiac in a dataset.
 
 tab5<-xtabs(~sex+zodiac,data=(data))
 chisq.test(tab5, correct=FALSE, simulate.p.value = TRUE)
@@ -211,8 +215,8 @@ chisq.test(tab5, correct=FALSE, simulate.p.value = TRUE)
 barplot(tab5,beside=T,col=colors()[461:462],ylim=c(0,60),las=3)
 legend("topleft",col=colors()[461:462],lwd=2,legend=levels(data$sex))
 
-## health ~ zodiac 
-
+##  Chi-Square test of independence to evaluate whether there
+## is a significant association between health and zodiac in a dataset.
 tab6<-xtabs(~health+zodiac,data=(data))
 chisq.test(tab6, correct=FALSE, simulate.p.value = TRUE)
  
@@ -220,46 +224,55 @@ barplot(tab6,beside = T,col=colors()[c(490,493,562,574)],ylim=c(0,50),main="Heal
 legend("topright",legend=levels(data$health),col=colors()[c(490,493,562,574)],lwd=2)
 
 ## -----------------------------------------------------------------------------------------------------------------
-##  4.
+##  4.Predictive / interpretive models.
 ## -----------------------------------------------------------------------------------------------------------------
 
+## 
 educ_male<-data[data$sex="MALE",]
-
 shapiro.test(educ_male$educ)  
-educ_female<-data[data$sex="FEMALE",]
 
+##
+educ_female<-data[data$sex="FEMALE",]
 shapiro.test(educ_female$educ)   
 
+## check if the mean  is  an appropriate for descriptive  measure for each category.
 library(psych)
 by(data$educ,data$sex,describe)
 
+## Kruskal-Wallis rank sum test, which is a non-parametric test used 
+## to determine whether there are statistically significant differences 
+## between the medians of two or more independent groups.
 kruskal.test(data$educ~data$sex)
 
-
+##  compares the distribution of educ across sex  (gender) 
 library(car)
 Boxplot(educ~sex, data=data, id=list(n=Inf),col=c("blue","red"),main="EDUC~SEX",ylab = "EDUC",xlab = "SEX",cex.main=2)
 
-
-
+## ANOVA check  is a statistically significant difference in the mean 
+## values of the educ (education level) variable across different levels of the zodiac variable
 
 m2<-aov(lm(educ~zodiac,data=data))
 
-
-
+## check normallity for m2
 shapiro.test(m2$residuals)
 
-
+## check if the mean  is  an appropriate for descriptive  measure for each category.
 by(data$educ,data$zodiac,describe)
 
+## Kruskal-Wallis rank sum test, which is a non-parametric test used 
+## to determine whether there are statistically significant differences 
+## between the medians of two or more independent groups.
 
 kruskal.test(data$educ ~ data$zodiac)
 
-
+## fits a multiple linear regression model to predict the
+## wealth variable using all other variables in the dataset as predictors
 fullmodel <- lm(wealth~., data = na.omit(data))
 
-
-
+## is performing a Shapiro-Wilk test on the standardized residuals of the linear regression model fullmodel
 shapiro.test(rstandard(fullmodel)) 
+
+## Homoscedasticity and outliers for the full model 
 
 par (mfrow=c(2,2))
 plot(fullmodel)
@@ -272,36 +285,37 @@ quantcut <- function(x, digits=6){ cut(x, breaks=quantile(x),  include.lowest=TR
 qfits <- quantcut( fullmodel$fit )
 leveneTest(rstandard(fullmodel), qfits) 
 
- 
-
 dwt(fullmodel)
-
 
 fullmodel <- lm(wealth~., data = na.omit(data))
 
-
+## Stepwise methodsfor the  full linear model (fullmodel) using both forward
+## and backward selection, guided by the Bayesian Information Criterion (BIC).   
 step <- step(fullmodel, direction = "both", k = log(nrow(data))) #BIC
+## 
 data1<-na.omit(data)
-
-
+## fits a multiple linear regression model to predict the
+## wealth variable with only the most important predictors for explaining wealth, 
+## as determined by the BIC criterion.
 
 model2<-lm(wealth ~ age + educ,data=data1)
 
-age_cen=data1$age- mean(data1$age)   
+## Centering a variable so the interpretation of regression coefficients are more meaningful
+age_cen=data1$age - mean(data1$age)   
 educ_cen=data1$educ-mean(data1$educ)
 
-
-
+## fits a multiple linear regression model to predict the
+## wealth variable with only the most important predictors for explaining wealth, 
+## as determined by the BIC criterion and with the centered variables.
 model2<-lm(wealth~age_cen+educ_cen,data=data1)
 
+## is performing a Shapiro-Wilk test on the standardized residuals of the linear regression model model2
 shapiro.test(rstandard(model2)) 
-
-
 
 par (mfrow=c(2,2))
 plot(model2)
 
-#Homoscedasticity and outliers 
+## Homoscedasticity and outliers for the model12
 plot(model2$fit, rstandard(model2), cex=2, col='blue', ylim = c(-4, 4))
 abline( h= 1.96, col='red', lwd=2, lty=2 )
 abline( h=-1.96, col='red', lwd=2, lty=2 )
@@ -309,7 +323,6 @@ abline( h=-1.96, col='red', lwd=2, lty=2 )
 quantcut <- function(x, digits=6){ cut(x, breaks=quantile(x),  include.lowest=TRUE, dig.lab = digits) }
 qfits <- quantcut( model2$fit )
 leveneTest(rstandard(model2), qfits) 
-
 
 ts.plot(rstandard(model2))
 dwt(model2)
